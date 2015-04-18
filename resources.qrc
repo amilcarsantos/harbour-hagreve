@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/desconvocada.png</file>
+        <file>harbour-hagreve.png</file>
+    </qresource>
+</RCC>
