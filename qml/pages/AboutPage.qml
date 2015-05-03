@@ -75,7 +75,7 @@ Page {
 
 			Label {
 				font.pixelSize: Theme.fontSizeMedium
-				text: "Há Greve - v0.1"
+				text: "Há Greve - v0.2"
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
 			Label {

@@ -1,6 +1,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Sun May 04 2015 Amilcar Santos <amilcar.santos@gmail.com> 0.1-2
+- Fix date format for day
+- Fix multiple days strike
+
 * Sun Apr 19 2015 Amilcar Santos <amilcar.santos@gmail.com> 0.1-1
 - Initial release
 

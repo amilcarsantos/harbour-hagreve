@@ -32,68 +32,60 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Item {
-    id:root
-    height: Theme.itemSizeLarge
-    width: Theme.itemSizeExtraLarge
+	id:root
+	height: Theme.itemSizeLarge
+	width: Theme.itemSizeExtraLarge
 
-    property alias name: _name.text
-    property bool fade
+	property alias name: _name.text
+	property bool fade
 
-    Rectangle {
+	Rectangle {
 //        anchors.fill: parent
-//        color: Theme.rgba(fade ? Theme.highlightColor: Theme.secondaryColor, 0.05)
-        radius: 4
-        clip: true
+		radius: 4
+		clip: true
 
-        anchors.centerIn: parent
-        width: parent.height
-        height: parent.width
-        rotation: 90
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: Theme.rgba(Theme.highlightBackgroundColor, 0.1) }
-            GradientStop { position: 0.9; color: "transparent" }
-        }
+		anchors.centerIn: parent
+		width: parent.height
+		height: parent.width
+		rotation: 90
+		gradient: Gradient {
+			GradientStop { position: 0.0; color: Theme.rgba(Theme.highlightBackgroundColor, 0.1) }
+			GradientStop { position: 0.9; color: "transparent" }
+		}
 
-        Image {
-            anchors {
-                bottom: parent.bottom
-                right: parent.right
-            }
+		Image {
+			anchors {
+				bottom: parent.bottom
+				right: parent.right
+			}
 
-            width: Math.min(parent.width, sourceSize.width)
-            height: Math.min(parent.height, sourceSize.height)
+			width: Math.min(parent.width, sourceSize.width)
+			height: Math.min(parent.height, sourceSize.height)
 
-            opacity: 0.30
-        source: "image://theme/graphic-gradient-corner?" + Theme.highlightBackgroundColor
-        }
-//        Image {
-//            id: favoriteImage
-//            anchors.fill: parent
-//            fillMode: Image.Stretch
-//            source: "image://theme/graphic-avatar-text-back"
-//            // source: "image://theme/graphic-gradient-corner?" + Theme.secondaryColor
-//        }
-    }
+			opacity: 0.30
+		source: "image://theme/graphic-gradient-corner?" + Theme.highlightBackgroundColor
+		}
+	}
 
-    Label {
-        id:_name
-        anchors.fill: parent
-        wrapMode: Text.Wrap
-        font.bold: true
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: Theme.fontSizeMedium
-        opacity: fade ? 0.7 : 1
-    }
+	Label {
+		id:_name
+		anchors.fill: parent
+		wrapMode: Text.Wrap
+		font.bold: true
+		verticalAlignment: Text.AlignVCenter
+		horizontalAlignment: Text.AlignHCenter
+		font.pixelSize: Theme.fontSizeMedium
+		opacity: fade ? 0.7 : 1
+	}
 
 
-    Component.onCompleted: {
-        //print(_name.paintedHeight + " - " + _name.paintedWidth)
-        if (_name.paintedHeight > root.height || _name.paintedWidth > root.width) {
-            //print("small " + name)
-            _name.font.pixelSize = Theme.fontSizeExtraSmall
-        } else {
-            _name.font.pixelSize = Theme.fontSizeMedium
-        }
-    }
+	Component.onCompleted: {
+		//print(_name.paintedHeight + " - " + _name.paintedWidth)
+		if (_name.paintedHeight > root.height || _name.paintedWidth > root.width) {
+			//print("small " + name)
+			_name.font.pixelSize = Theme.fontSizeExtraSmall
+		} else {
+			_name.font.pixelSize = Theme.fontSizeMedium
+		}
+	}
 }

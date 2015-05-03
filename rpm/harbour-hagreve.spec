@@ -13,11 +13,11 @@ Name:       harbour-hagreve
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Ha Greve Application
-Version:    0.1
+Version:    0.2
 Release:    1
-Group:      Qt/Qt
+Group:      Applications/Internet
 License:    LICENSE
-URL:        http://example.org/
+URL:        https://github.com/amilcarsantos/harbour-hagreve
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-hagreve.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -28,7 +28,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Short description of my SailfishOS Application
+Unofficial hagreve.com client for SailfishOS.
 
 
 %prep
@@ -62,10 +62,12 @@ desktop-file-install --delete-original       \
    %{buildroot}%{_datadir}/applications/*.desktop
 
 %files
-%defattr(-,root,root,-)
+%defattr(644,root,root,-)
 %{_bindir}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 # >> files
 # << files
+
+%attr(755, root, root) %{_bindir}

@@ -110,10 +110,17 @@ CoverBackground {
 	onStatusChanged: {
 		if (status === Cover.Activating) {
 			coverModel.clear()
+			var todayDate = new Date()
+			todayDate.setHours(23, 59, 59)
+			var today = todayDate.getTime()
 			for (var i = 0; i < Math.min(strikeModel.count, 3); i++) {
+				var dateTime = "Hoje"
+				if (strikeModel.get(i).dateTime.getTime() > today) {
+					dateTime = Qt.formatDate(strikeModel.get(i).dateTime, "d MMM")
+				}
 				coverModel.append({
 					'company' : strikeModel.get(i).company,
-					'date': Qt.formatDate(strikeModel.get(i).dateTime, "d MMM"),
+					'date': dateTime,
 					'canceled': strikeModel.get(i).canceled,
 				});
 			}

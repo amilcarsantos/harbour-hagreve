@@ -47,10 +47,10 @@ Page {
         id: listView
 
 		PullDownMenu {
-            MenuItem {
+			MenuItem {
 				text: qsTr("Sobre")
 				onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
-            }
+			}
 			MenuItem {
 				text: qsTr("Actualizar")
 				enabled: page.state == 'loaded'
@@ -61,29 +61,29 @@ Page {
 			}
 		}
 
-        model: strikeModel
-        anchors.fill: parent
-        header: Column {
-            id: column
+		model: strikeModel
+		anchors.fill: parent
+		header: Column {
+			id: column
 
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("Hoje há greve?")
+			width: page.width
+			spacing: Theme.paddingLarge
+			PageHeader {
+				title: qsTr("Hoje há greve?")
 				description: Qt.formatDate(new Date(), "d MMMM")
-            }
-        }
+			}
+		}
 
 		delegate: StrikeDelegate { }
 
-        section {
-            property: 'section'
+		section {
+			property: 'section'
 
-            delegate: SectionHeader {
-                text: section
-                height: Theme.itemSizeExtraSmall
-            }
-        }
+			delegate: SectionHeader {
+				text: section
+				height: Theme.itemSizeExtraSmall
+			}
+		}
 
 		ViewPlaceholder {
 			enabled: strikeModel.count == 0 && page.state == 'loaded'
@@ -95,7 +95,7 @@ Page {
 			height: Theme.paddingLarge
 		}
 
-        VerticalScrollDecorator {}
+		VerticalScrollDecorator {}
 	}
 
 	MouseArea {
@@ -217,26 +217,20 @@ Page {
 		for (var i = 0; i < strikes.length; ++i) {
 			//print(strikes[i].start_date)
 
-			var dateTime = new Date(strikes[i].start_date)
-			var section = formatSectionName(dateTime)
-
-			var durationStart = 'Todo o dia'
-			var durationEnd = ''
-			if (!strikes[i].all_day) {
-				//var t = (new Date(strikes[i].end_date).getTime() -  dateTime.getTime()) / 1000
-				//duration = Format.formatDuration( t , Formatter.TimeValueTwentyFourHours)
-				durationStart = Qt.formatTime(dateTime, "hh:mm")
-				durationEnd = Qt.formatTime(new Date(strikes[i].end_date), "hh:mm")
+			var datesObj = {
+				startDate: new Date(strikes[i].start_date),
+				endDate: new Date(strikes[i].end_date),
+				allDay: strikes[i].all_day
 			}
 
 			strikeModel.append({
-				'dateTime': dateTime,
-				'section': section,
+				'dateTime': datesObj.startDate,
+				'section': formatSectionName(datesObj.startDate),
 				'company' : strikes[i].company.name,
 				'description' : strikes[i].description,
 				'url': strikes[i].source_link,
-				'durationStart': durationStart,
-				'durationEnd': durationEnd,
+				'durationStart': formatDuration(datesObj, 0, "Todo o dia"),
+				'durationEnd': formatDuration(datesObj, 1, ""),
 				'canceled': strikes[i].canceled
 			})
 		}
@@ -248,31 +242,44 @@ Page {
 		var section = ""
 
 		if (dateTime.getTime() < Const.MAX_WEEK_TIME + now) {
-			section = Format.formatDate(dateTime, Formatter.TimepointSectionRelative);
-			if (!section) {
-				return 'Hoje'
+			if (dateTime.getTime() > now) {
+				section = Format.formatDate(dateTime, Formatter.TimepointSectionRelative);
 			}
-		} /*else {
-			section = Format.formatDate(dateTime, Formatter.DurationElapsed);
-		}*/
+			if (!section) {
+				return "Hoje"
+			}
+		}
 
 		//print(section + "----" +dateTime );
 
-		var dayFormat = "d"
-		if (nowDate.getMonth() !== dateTime.getMonth()) {
-			dayFormat = "d MMMM"
-		}
+		var dayFormat = "dddd, d"
 		if (section) {
 			section = section + ", "
+			dayFormat = "d"
+		}
+		if (nowDate.getMonth() !== dateTime.getMonth()) {
+			dayFormat = "d MMMM"
 		}
 		section = section + Qt.formatDate(dateTime, dayFormat)
 		return section
 	}
 
+	function formatDuration(datesObj, dateIndex, allDayText) {
+		var duration  = allDayText
+		var dateTime = datesObj.startDate
+		if (dateIndex === 1) {
+			dateTime = datesObj.endDate
+		}
 
-	/*function loadStrikes() {
-		fillStrikeModel(JSON.parse('[	{		"source_link": "http://www.cp.pt/passageiros/pt/consultar-horarios/avisos/circulacao-16-de-abril-",		"submitter": {			"first_name": "",			"last_name": ""		},		"start_date": "2015-04-15 00:26:12",		"end_date": "2015-04-15 00:26:32",		"company": {			"name": "CP",			"id": 1		},		"id": 430,		"canceled": false,		"all_day": true,		"description": "Greve. Foram decretados serviços mínimos pelo CES, disponíveis na nossa fonte."	},	{		"source_link": "http://www.publico.pt/local/noticia/greve-do-metropolitano-de-lisboa-adiada-para-dia-17-1691717",		"submitter": {			"first_name": "",			"last_name": ""		},		"start_date": "2015-04-17 23:45:18",		"end_date": "2015-04-17 23:46:21",		"company": {			"name": "Metro de Lisboa",			"id": 2		},		"id": 431,		"canceled": false,		"all_day": true,		"description": "Greve de 24h."}, {		"description": "Greve de 24h.",	"submitter": {			"last_name": "",			"first_name": ""		},		"end_date": "2015-05-01 09:18:44",		"all_day": false,		"company": {			"name": "Carris",			"id": 10		},		"id": 427,		"canceled": true,		"source_link": "http://www.jornaldenegocios.pt/empresas/detalhe/greve_na_carris_a_10_de_abril.html",		"start_date": "2015-05-01 17:18:40"	}]'));
-	}*/
+		if (!datesObj.allDay) {
+			duration = Qt.formatTime(dateTime, "hh:mm")
+		} else {
+			if (datesObj.startDate.getDate() !== datesObj.endDate.getDate()) {
+				duration = Qt.formatDate(dateTime, "d MMMM")
+			}
+		}
+		return duration;
+	}
 }
 
 
